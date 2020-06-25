@@ -10,8 +10,10 @@
 .ToDoText {
   font-size: 12px;
   margin: 0;
-  max-width: 360px;
+  width: 360px;
   padding-left: 10px;
+  border: 0;
+  outline: none;
 }
 
 .Strike {
@@ -20,6 +22,11 @@
 
 .DateText {
   font-size: 8px;
+}
+
+.Editing {
+  border: 2px solid red;
+  padding: 5px;
 }
 
 .TitleCont {

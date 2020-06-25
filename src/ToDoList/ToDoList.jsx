@@ -15,18 +15,21 @@ class ToDoList extends React.Component {
 					value: "Ask Ross Baker how he is so good at code", 
 					date: "5 PM", 
 					checked: false, 
+					editing: false,
 				}, 
 				{
 					id: 2, 
 					value: "Fix my trash work portfolio", 
 					date: "6 PM", 
-					checked: false, 
+					checked: false,
+					editing: false, 
 				}, 
 				{
 					id: 52, 
 					value: "Grind and Stream Valorant", 
 					date: "7 PM", 
-					checked: false, 
+					checked: false,
+					editing: false, 
 				}, 
 			],
 		};
@@ -38,8 +41,9 @@ class ToDoList extends React.Component {
 			const newItem = {
 				id: 1+ Math.random(), 
 				value: this.state.item.slice(),
-				date: moment(). format("LT"), 
+				date: moment().format("LT"), 
 				checked: false, 
+				editing: false,
 			};
 			let list = [...this.state.list];
 	
@@ -52,9 +56,45 @@ class ToDoList extends React.Component {
 		this.setState({ [key]: value });
 	}
 
+	setEditing(id) {
+		let list = this.state.list;
+		const item = list.findIndex((item) => item.id === id);
+		let updatedItem = list[item];
+		updatedItem.editing = true;
+		const newToDoList = [...list];
+		newToDoList[item] = updatedItem;
+		this.setState({list: newToDoList});
+
+	}
+
+	deactivateEditing(e, id) {
+		e.preventDefault();
+		let list = this.state.list;
+		const item = list.findIndex((item) => item.id === id);
+		let updatedItem = list[item];
+		updatedItem.editing = false;
+		updatedItem.date = moment().format("LT");
+		const newToDoList = [...list];
+		newToDoList[item] = updatedItem;
+		this.setState({list: newToDoList});
+
+	}
+
+	editTask(id, value) {
+		let list = this.state.list;
+		const item = list.findIndex((item) => item.id === id);
+		let updatedItem = list[item];
+		updatedItem.value = value;
+		const newToDoList = [...list];
+		newToDoList[item] = updatedItem;
+		this.setState({list: newToDoList});
+
+
+	}
+
 	crossItem(id) {
 		let list = this.state.list;
-		const item = list.findIndex((item) => item.id == id);
+		const item = list.findIndex((item) => item.id === id);
 		let updatedItem = list[item];
 		updatedItem.checked = !updatedItem.checked;
 		const newToDoList = [...list];
@@ -81,6 +121,10 @@ render() {
 			<ul className="ListCont">
 			{this.state.list.map((item) => ( 
 				<Item
+				editingState={item.editing}
+				setEditing={() => this.setEditing(item.id)}
+				deactivateEditing={(e) => this.deactivateEditing(e, item.id)}
+				editTask={(e) => this.editTask(item.id, e.target.value)}
 				key={item.id} 
 				checked={item.checked} 
 				id={item.id} 
